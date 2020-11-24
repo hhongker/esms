@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+      <!--  创建DataSource -->
+      <bean  id="dataSource"  class="org.apache.commons.dbcp.BasicDataSource">
+           <property name="driverClassName"  value="com.mysql.jdbc.Driver"></property>
+           <property name="url"  value="jdbc:mysql://127.0.0.1:3306/esms?characterEncoding=UTF8&amp;characterSetResults=UTF8&amp;zeroDateTimeBehavior=convertToNull"></property>
+           <property name="username"  value="root"></property>
+           <property name="password" >
+                <value>123456</value>
+           </property>
+       </bean>
+	   <!--  配置SqlSessionFactoryBean  -->
+	   	<bean  id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+	   	    <property name="dataSource" ref="dataSource"></property>
+	   	    <property name="mapperLocations" value="classpath:com/dyedu/mapper/*.xml"></property>
+
+		</bean>
+	<!--  MapperScannerConfigurer 批量生产Mapper 实现类 -->
+	<bean  id="mapperScanner"  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage"  value="com.dyedu.mapper"></property>
+	</bean>
+	<!--  开启组件扫描 -->
+	<context:component-scan base-package="com.dyedu"></context:component-scan>
+    <!--  开启组件扫描 和 标注形式的mvc -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+	<!--放行静态资源 -->
+    <mvc:default-servlet-handler/>
+	<!--  视图处理器  -->
+	<bean  id="viewResolver"
+	    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	    <property name="prefix"  value="/WEB-INF/"></property>
+	    <property name="suffix"  value=".jsp"></property>
+	</bean>
+	<!-- 开启声明式事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+    <!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		 <property name="dataSource" ref="dataSource"></property>
+	</bean>
+</beans>
+
+
+

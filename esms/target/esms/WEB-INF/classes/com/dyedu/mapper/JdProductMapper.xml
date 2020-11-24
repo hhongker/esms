@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- namespace指定和哪个Mapper映射器接口对应 -->
+<mapper namespace="com.dyedu.mapper.JdProductDAO">
+	<!-- 定义SQL语句  根据页面信息查询产品列表 -->
+    <select id="getProductListByPageInfo" resultType="com.dyedu.bean.JdProduct">
+        select  jp.*  from  jd_product jp,jd_category_product jcp
+            where  jp.product_id = jcp.product_id and jcp.category_id = #{category_id}
+            order by ${order_std}  ${order_type}  limit #{start_pos},#{page_size}
+    </select>
+    <!-- 计算某个类别的总条数 -->
+    <select id="getProductCountByCategoryId" parameterType="int" resultType="int">
+         select   count(product_id) from jd_category_product
+            where category_id =  #{category_id}
+    </select>
+    <!-- 根据id 获取商品对象  -->
+    <select id="getProductById" parameterType="int" resultType="com.dyedu.bean.JdProduct">
+         select * from jd_product where product_id = #{product_id}
+    </select>
+</mapper>

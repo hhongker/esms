@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- namespace指定和哪个Mapper映射器接口对应 -->
+<mapper namespace="com.dyedu.mapper.JdOrderDAO">
+	<!-- 定义SQL语句  插入订单-->
+    <insert id="insertJdOrder" parameterType="com.dyedu.bean.JdOrder"
+            useGeneratedKeys="true" keyProperty="order_id">
+         insert into jd_order(user_id,status,order_time,total_price,payment_id,
+         invoice_id,reveive_address_id,bak)
+         values (#{user_id},#{status},#{order_time},#{total_price},#{payment_id},
+         #{invoice_id},#{reveive_address_id},#{bak})
+    </insert>
+    <!-- 根据订单id 修改订单状态 -->
+    <update id="updateOrderStatus" >
+         update  jd_order  set status = #{status} where order_id = #{order_id}
+    </update>
+    <!-- 一个方法搞定当前用户的订单列表  以及  当前用户对于的取消的订单列表 -->
+    <select id="getOrderList"
+            resultType="com.dyedu.bean.JdOrder">
+         select * from  jd_order where user_id = #{user_id}
+            <if test="status != null and status != ''">
+                 and  status = #{status}
+            </if>
+    </select>
+</mapper>

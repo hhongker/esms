@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- namespace指定和哪个Mapper映射器接口对应 -->
+<mapper namespace="com.dyedu.mapper.JdUserDAO">
+	<!-- 定义SQL语句  根据账号和密码 进行查询-->
+    <select id="findJdUser"   resultType="com.dyedu.bean.JdUser" >
+         select  user_id, login_name,password,last_login_time from jd_user where  login_name = #{login_name}
+             and password = #{password}
+    </select>
+    <insert id="insertJdUser" parameterType="com.dyedu.bean.JdUser">
+         insert into jd_user(login_name,password,email,recommender)
+            values (#{login_name},#{password},#{email},#{recommender})
+    </insert>
+</mapper>
